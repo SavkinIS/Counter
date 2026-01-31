@@ -19,19 +19,13 @@ public class CounterView : MonoBehaviour
             _counter = FindFirstObjectByType<Counter>();
 
         if (_counter != null)
-            _counter.OnCounterChanged += UpdateView;
-    }
-
-    private void OnDestroy()
-    {
-        if (_counter != null)
-            _counter.OnCounterChanged -= UpdateView;
+            _counter.CounterChanged += UpdateView;
     }
 
     private void OnDisable()
     {
         if (_counter != null)
-            _counter.OnCounterChanged -= UpdateView;
+            _counter.CounterChanged -= UpdateView;
     }
     
     private void OnValidate()

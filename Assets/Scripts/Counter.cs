@@ -4,24 +4,25 @@ using UnityEngine;
 
 public class Counter : MonoBehaviour
 {
-    private const int m_leftMousebutton = 0;
-
     [SerializeField] private float _tickRate = 0.5f;
+    [SerializeField] private InputReader  _inputReader;
 
     private int _currentTime;
     private bool _isTicking;
     private bool _isRunning;
     private float _elapsedTime;
 
-    public event Action<int> OnCounterChanged;
+    public event Action<int> CounterChanged;
 
     private void Start()
     {
         _isRunning = true;
-        OnCounterChanged += (timer) 
-            => { Debug.Log($"Timer Tick {timer}"); };
-
         StartCoroutine(TimerCoroutine());
+    }
+
+    private void ChangeTickingState()
+    {
+        _isTicking = !_isTicking;
     }
 
     private IEnumerator TimerCoroutine()
@@ -30,16 +31,6 @@ public class Counter : MonoBehaviour
 
         while (_isRunning)
         {
-            if (Input.GetMouseButtonDown(m_leftMousebutton))
-            {
-                _isTicking = !_isTicking;
-
-                if (_isTicking)
-                    Debug.Log($"Timer is running");
-                else
-                    Debug.Log($"Timer is paused");
-            }
-
             if (_isTicking)
             {
                 _elapsedTime += Time.deltaTime;
@@ -48,7 +39,7 @@ public class Counter : MonoBehaviour
                 {
                     _elapsedTime -= _tickRate;
                     _currentTime++;
-                    OnCounterChanged?.Invoke(_currentTime);
+                    CounterChanged?.Invoke(_currentTime);
                 }
             }
             else
@@ -59,9 +50,21 @@ public class Counter : MonoBehaviour
             yield return null;
         }
     }
+
+    private void OnEnable()
+    {
+       if (_inputReader != null)
+           _inputReader.LeftMouseClicked += ChangeTickingState;
+    }
+
+    private void OnDisable()
+    {
+        if (_inputReader != null)
+        _inputReader.LeftMouseClicked -= ChangeTickingState;
+    }
     
     private void OnDestroy()
     {
-        OnCounterChanged = null;
+        CounterChanged = null;
     }
 }

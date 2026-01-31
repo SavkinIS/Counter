@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets/Scripts/CounterView.cs" />
+    <Compile Include="Assets/Scripts/InputReader.cs" />
     <Compile Include="Assets/Scripts/Counter.cs" />
     <None Include="Library/PackageCache/com.unity.settings-manager@2.1.0/package.json" />
     <None Include="Library/PackageCache/com.unity.modules.subsystems@1.0.0/package.json" />
