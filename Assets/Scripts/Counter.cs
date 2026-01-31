@@ -60,7 +60,7 @@ public class Counter : MonoBehaviour
     private void OnDisable()
     {
         if (_inputReader != null)
-        _inputReader.LeftMouseClicked -= ChangeTickingState;
+            _inputReader.LeftMouseClicked -= ChangeTickingState;
     }
     
     private void OnDestroy()
