@@ -5,8 +5,7 @@ using UnityEngine;
 public class CounterView : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _timerText;
-
-    private Counter _counter;
+    [SerializeField] private Counter _counter;
 
     private void OnEnable()
     {
@@ -18,14 +17,6 @@ public class CounterView : MonoBehaviour
     {
         if (_counter != null)
             _counter.CounterChanged -= UpdateView;
-    }
-
-    private void OnValidate()
-    {
-        if (_timerText == null)
-        {
-            _timerText = GetComponent<TextMeshProUGUI>();
-        }
     }
     
     private void UpdateView(int counter)
