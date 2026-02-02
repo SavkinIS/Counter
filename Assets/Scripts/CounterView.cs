@@ -8,16 +8,8 @@ public class CounterView : MonoBehaviour
 
     private Counter _counter;
 
-    private void UpdateView(int counter)
-    {
-        _timerText.text = counter.ToString();
-    }
-
     private void OnEnable()
     {
-        if (_counter == null)
-            _counter = FindFirstObjectByType<Counter>();
-
         if (_counter != null)
             _counter.CounterChanged += UpdateView;
     }
@@ -27,12 +19,17 @@ public class CounterView : MonoBehaviour
         if (_counter != null)
             _counter.CounterChanged -= UpdateView;
     }
-    
+
     private void OnValidate()
     {
         if (_timerText == null)
         {
             _timerText = GetComponent<TextMeshProUGUI>();
         }
+    }
+    
+    private void UpdateView(int counter)
+    {
+        _timerText.text = counter.ToString();
     }
 }

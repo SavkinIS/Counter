@@ -19,6 +19,23 @@ public class Counter : MonoBehaviour
     {
         _isRunning = true;
     }
+    
+    private void OnEnable()
+    {
+        if (_inputReader != null)
+            _inputReader.LeftMouseClicked += ChangeTickingState;
+    }
+
+    private void OnDisable()
+    {
+        if (_inputReader != null)
+            _inputReader.LeftMouseClicked -= ChangeTickingState;
+    }
+
+    private void OnDestroy()
+    {
+        CounterChanged = null;
+    }
 
     private void ChangeTickingState()
     {
@@ -50,22 +67,5 @@ public class Counter : MonoBehaviour
 
             yield return null;
         }
-    }
-
-    private void OnEnable()
-    {
-        if (_inputReader != null)
-            _inputReader.LeftMouseClicked += ChangeTickingState;
-    }
-
-    private void OnDisable()
-    {
-        if (_inputReader != null)
-            _inputReader.LeftMouseClicked -= ChangeTickingState;
-    }
-
-    private void OnDestroy()
-    {
-        CounterChanged = null;
     }
 }
