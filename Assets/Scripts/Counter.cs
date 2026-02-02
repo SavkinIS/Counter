@@ -5,46 +5,47 @@ using UnityEngine;
 public class Counter : MonoBehaviour
 {
     [SerializeField] private float _tickRate = 0.5f;
-    [SerializeField] private InputReader  _inputReader;
+    [SerializeField] private InputReader _inputReader;
 
     private int _currentTime;
     private bool _isTicking;
     private bool _isRunning;
     private float _elapsedTime;
-
+    private Coroutine _counterCoroutine;
+    
     public event Action<int> CounterChanged;
-
+    
     private void Start()
     {
         _isRunning = true;
-        StartCoroutine(TimerCoroutine());
     }
 
     private void ChangeTickingState()
     {
         _isTicking = !_isTicking;
+
+        if (_isTicking)
+        {
+            _elapsedTime = 0f;
+            _counterCoroutine = StartCoroutine(TimerCoroutine());
+        }
+        else
+        {
+            StopCoroutine(_counterCoroutine);
+        }
     }
 
     private IEnumerator TimerCoroutine()
     {
-        yield return new WaitForFixedUpdate();
-
-        while (_isRunning)
+        while (_isTicking)
         {
-            if (_isTicking)
-            {
-                _elapsedTime += Time.deltaTime;
+            _elapsedTime += Time.deltaTime;
 
-                if (_elapsedTime >= _tickRate)
-                {
-                    _elapsedTime -= _tickRate;
-                    _currentTime++;
-                    CounterChanged?.Invoke(_currentTime);
-                }
-            }
-            else
+            if (_elapsedTime >= _tickRate)
             {
-                _elapsedTime = 0f;
+                _elapsedTime -= _tickRate;
+                _currentTime++;
+                CounterChanged?.Invoke(_currentTime);
             }
 
             yield return null;
@@ -53,8 +54,8 @@ public class Counter : MonoBehaviour
 
     private void OnEnable()
     {
-       if (_inputReader != null)
-           _inputReader.LeftMouseClicked += ChangeTickingState;
+        if (_inputReader != null)
+            _inputReader.LeftMouseClicked += ChangeTickingState;
     }
 
     private void OnDisable()
@@ -62,7 +63,7 @@ public class Counter : MonoBehaviour
         if (_inputReader != null)
             _inputReader.LeftMouseClicked -= ChangeTickingState;
     }
-    
+
     private void OnDestroy()
     {
         CounterChanged = null;
